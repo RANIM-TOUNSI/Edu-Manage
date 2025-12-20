@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Gestion des Formateurs</h2>
+            <a href="/admin/formateurs/create" class="btn btn-primary"><i class="bi bi-plus"></i> Nouveau</a>
+        </div>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Spécialité</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="f : ${formateurs}">
+                    <td th:text="${f.id}"></td>
+                    <td th:text="${f.nom}"></td>
+                    <td th:text="${f.specialite}"></td>
+                    <td th:text="${f.email}"></td>
+                    <td>
+                        <a th:href="@{/admin/formateurs/edit/{id}(id=${f.id})}" class="btn btn-sm btn-warning"><i
+                                class="bi bi-pencil"></i></a>
+                        <a th:href="@{/admin/formateurs/delete/{id}(id=${f.id})}" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Etes-vous sûr ?')"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

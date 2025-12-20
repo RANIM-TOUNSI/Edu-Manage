@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Gestion des Cours</h2>
+            <a href="/admin/cours/create" class="btn btn-primary"><i class="bi bi-plus"></i> Nouveau</a>
+        </div>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Code</th>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Formateur</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${cours}">
+                    <td th:text="${c.code}"></td>
+                    <td th:text="${c.titre}"></td>
+                    <td th:text="${c.description}"></td>
+                    <td th:text="${c.formateurNom} ?: 'Non assigné'"></td>
+                    <td>
+                        <a th:href="@{/admin/cours/edit/{id}(id=${c.code})}" class="btn btn-sm btn-warning"><i
+                                class="bi bi-pencil"></i></a>
+                        <a th:href="@{/admin/cours/delete/{id}(id=${c.code})}" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Etes-vous sûr ?')"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Consultation des Notes</h2>
+        </div>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Valeur</th>
+                    <th>Etudiant</th>
+                    <th>Cours</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="n : ${notes}">
+                    <td th:text="${n.id}"></td>
+                    <td th:text="${n.valeur}"></td>
+                    <td th:text="${n.etudiantMatricule}"></td>
+                    <td th:text="${n.coursCode}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
