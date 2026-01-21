@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="mb-4">
+            <h2>Planifier une Séance</h2>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/admin/planning/create}" th:object="${seanceInput}" method="post">
+
+                    <div class="mb-3">
+                        <label for="cours" class="form-label">Cours</label>
+                        <select class="form-select" id="cours" th:field="*{course.id}" required>
+                            <option value="" disabled selected>Choisir un cours...</option>
+                            <option th:each="c : ${courses}" th:value="${c.id}"
+                                th:text="${c.title} + ' - ' + (${c.trainer != null} ? ${c.trainer.name} : 'Pas de formateur') ">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" th:field="*{date}" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="start" class="form-label">Heure Début</label>
+                            <input type="time" class="form-control" id="start" th:field="*{startTime}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="end" class="form-label">Heure Fin</label>
+                            <input type="time" class="form-control" id="end" th:field="*{endTime}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="room" class="form-label">Salle</label>
+                        <input type="text" class="form-control" id="room" th:field="*{room}"
+                            placeholder="Ex: Amphi B, Salle 101" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="groupe" class="form-label">Groupe</label>
+                        <select class="form-select" id="groupe" th:field="*{group.id}" required>
+                            <option value="" disabled selected>Choisir un groupe...</option>
+                            <option th:each="g : ${groups}" th:value="${g.id}" th:text="${g.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a th:href="@{/admin/planning}" class="btn btn-secondary">Annuler</a>
+                        <button type="submit" class="btn btn-primary">Planifier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

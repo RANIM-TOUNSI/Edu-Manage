@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="20260119-0" author="antigravity" failOnError="true">
+        <comment>Cleanup invalid users before adding constraints</comment>
+        <delete tableName="users">
+            <where>(role = 'STUDENT' AND student_id IS NULL) OR (role = 'TRAINER' AND trainer_id IS NULL)</where>
+        </delete>
+    </changeSet>
+
+    <changeSet id="20260119-1" author="antigravity">
+        <sql>
+            ALTER TABLE users 
+            ADD CONSTRAINT chk_student_id_not_null 
+            CHECK (role != 'STUDENT' OR student_id IS NOT NULL);
+            
+            ALTER TABLE users 
+            ADD CONSTRAINT chk_trainer_id_not_null 
+            CHECK (role != 'TRAINER' OR trainer_id IS NOT NULL);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20260119-2" author="antigravity">
+        <addForeignKeyConstraint baseColumnNames="trainer_id" baseTableName="users" constraintName="fk_user_trainer" referencedColumnNames="id" referencedTableName="trainers"/>
+        <addForeignKeyConstraint baseColumnNames="student_id" baseTableName="users" constraintName="fk_user_student" referencedColumnNames="id" referencedTableName="students"/>
+    </changeSet>
+
+</databaseChangeLog>

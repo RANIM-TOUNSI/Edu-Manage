@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <h2>Saisie d'une Note</h2>
+
+        <form th:action="@{/admin/notes/create}" method="post" class="mt-4">
+
+            <div class="mb-3">
+                <label for="studentId" class="form-label">Etudiant</label>
+                <select class="form-select" id="studentId" name="studentId" required>
+                    <option value="">Sélectionner un étudiant</option>
+                    <option th:each="e : ${etudiants}" th:value="${e.id}"
+                        th:text="|${e.lastName} ${e.firstName} (${e.matricule})|"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="courseId" class="form-label">Cours</label>
+                <select class="form-select" id="courseId" name="courseId" required>
+                    <option value="">Sélectionner un cours</option>
+                    <option th:each="c : ${courses}" th:value="${c.id}" th:text="|${c.title} (${c.code})|"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="value" class="form-label">Note (0-20)</label>
+                <input type="number" step="0.25" min="0" max="20" class="form-select" id="value" name="value" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Valider</button>
+            <a href="/admin/notes" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="mb-4">
+            <h1 style="font-weight: 800; color: #1e293b; margin: 0;">Training Specialties</h1>
+            <p style="color: #64748b; margin: 0;">Categorize courses into specialized domains.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+            <div class="card">
+                <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1.5rem;">New Specialty</h3>
+                <form th:action="@{/admin/advanced/specialties}" th:object="${newSpecialty}" method="post">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">Specialty
+                            Name</label>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Computer Science"
+                            required>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">Description</label>
+                        <textarea th:field="*{description}" class="form-control" rows="3"
+                            placeholder="Overview of the area..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" style="font-weight: 700;">Create
+                        Specialty</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Courses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${specialties}">
+                            <td style="font-weight: 700; color: #6366f1;" th:text="${s.name}"></td>
+                            <td th:text="${s.description}"></td>
+                            <td th:text="${#lists.size(s.courses)}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

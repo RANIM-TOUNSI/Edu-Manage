@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="mb-4">
+            <h1 style="font-weight: 800; color: #1e293b; margin: 0;">Academic Sessions</h1>
+            <p style="color: #64748b; margin: 0;">Define time periods for training cycles.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+            <!-- Creation Form -->
+            <div class="card">
+                <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1.5rem;">New Session</h3>
+                <form th:action="@{/admin/advanced/sessions}" th:object="${newSession}" method="post">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">Session
+                            Title</label>
+                        <input type="text" th:field="*{title}" class="form-control" placeholder="e.g. Fall 2026"
+                            required>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">Start
+                            Date</label>
+                        <input type="date" th:field="*{startDate}" class="form-control" required>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">End
+                            Date</label>
+                        <input type="date" th:field="*{endDate}" class="form-control" required>
+                    </div>
+                    <div class="form-check mb-4">
+                        <input type="checkbox" th:field="*{active}" class="form-check-input" id="activeCheck">
+                        <label class="form-check-label" for="activeCheck">Set as Active Session</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" style="font-weight: 700;">Initialize
+                        Session</button>
+                </form>
+            </div>
+
+            <!-- List -->
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Period</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${sessions}">
+                            <td style="font-weight: 700; color: #1e293b;" th:text="${s.title}"></td>
+                            <td th:text="|${s.startDate} to ${s.endDate}|"></td>
+                            <td>
+                                <span th:if="${s.active}" class="badge bg-success"
+                                    style="padding: 0.5rem 1rem;">Active</span>
+                                <span th:if="!${s.active}" class="badge bg-light text-dark"
+                                    style="padding: 0.5rem 1rem;">Inactive</span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <form th:action="@{/admin/advanced/sessions/toggle/{id}(id=${s.id})}" method="post"
+                                        style="display: inline;">
+                                        <button type="submit" class="btn btn-sm"
+                                            style="background: #f1f5f9; color: #475569;">Toggle</button>
+                                    </form>
+                                    <a th:href="@{/admin/advanced/sessions/delete/{id}(id=${s.id})}"
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Are you sure?')">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(sessions)}">
+                            <td colspan="4"
+                                style="text-align: center; padding: 3rem; color: #94a3b8; font-style: italic;">
+                                No academic sessions defined.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<div class="dashboard container animate-fade">
+    <div class="header">
+        <h1>General Statistics</h1>
+        <p>Real-time overview of education system</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="card stat-card">
+            <div class="card-icon blue">👥</div>
+            <div class="card-info">
+                <label>Total Students</label>
+                <h3>{{ stats.students }}</h3>
+            </div>
+            <a routerLink="/admin/students" class="btn-link">View Details</a>
+        </div>
+
+        <div class="card stat-card">
+            <div class="card-icon purple">👨‍🏫</div>
+            <div class="card-info">
+                <label>Total Trainers</label>
+                <h3>{{ stats.trainers }}</h3>
+            </div>
+            <a routerLink="/admin/trainers" class="btn-link">View Details</a>
+        </div>
+
+        <div class="card stat-card">
+            <div class="card-icon yellow">📚</div>
+            <div class="card-info">
+                <label>Active Courses</label>
+                <h3>{{ stats.courses }}</h3>
+            </div>
+            <a routerLink="/admin/courses" class="btn-link">View Details</a>
+        </div>
+    </div>
+
+    <div class="recent-activity card mt-4">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <button class="btn btn-primary" routerLink="/admin/enrollment">New Enrollment</button>
+            <button class="btn btn-outline" routerLink="/admin/students/new">Add Student</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="mb-4">
+            <h1 style="font-weight: 800; color: #1e293b; margin: 0;">Student Groups</h1>
+            <p style="color: #64748b; margin: 0;">Organize students into academic cohorts by specialty.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+            <div class="card">
+                <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1.5rem;">New Group</h3>
+                <form th:action="@{/admin/advanced/groups}" th:object="${newGroup}" method="post">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">Group
+                            Name</label>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. JAVA-2026-A"
+                            required>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label
+                            style="display: block; font-weight: 600; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem;">Assigned
+                            Specialty</label>
+                        <select th:field="*{specialty}" class="form-select" required>
+                            <option th:each="s : ${specialties}" th:value="${s.id}" th:text="${s.name}"></option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" style="font-weight: 700;">Create Group</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>
+                            <th>Specialty</th>
+                            <th>Student Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="g : ${groups}">
+                            <td style="font-weight: 700; color: #1e293b;" th:text="${g.name}"></td>
+                            <td th:text="${g.specialty.name}"></td>
+                            <td th:text="${#lists.size(g.students)}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Planning / Emploi du temps</h2>
+            <a th:href="@{/admin/planning/create}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Planifier Séance
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div th:if="${seances.empty}" class="alert alert-info">
+                    Aucune séance planifiée.
+                </div>
+                <table class="table table-striped" th:if="${!seances.empty}">
+                    <thead>
+                        <tr>
+                            <th>Date Debut</th>
+                            <th>Date Fin</th>
+                            <th>Cours</th>
+                            <th>Formateur</th>
+                            <th>Salle</th>
+                            <th>Groupe</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="seance : ${seances}">
+                            <td th:text="${seance.date}"></td>
+                            <td th:text="${seance.startTime} + ' - ' + ${seance.endTime}"></td>
+                            <td
+                                th:text="${seance.course != null ? (seance.course.title + ' (' + seance.course.code + ')') : 'N/A'}">
+                            </td>
+                            <td
+                                th:text="${seance.course != null && seance.course.trainer != null ? seance.course.trainer.name : 'N/A'}">
+                            </td>
+                            <td th:text="${seance.room}"></td>
+                            <td th:text="${seance.group != null ? seance.group.name : 'N/A'}"></td>
+                            <td>
+                                <a th:href="@{/admin/planning/delete/{id}(id=${seance.id})}"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir annuler cette séance ?');">
+                                    <i class="bi bi-trash"></i> Annuler
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

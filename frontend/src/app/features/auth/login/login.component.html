@@ -1,0 +1,33 @@
+<div class="auth-wrapper animate-fade-in">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>EduManage</h1>
+            <p>Welcome back! Please sign in.</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div *ngIf="error" class="error-message">
+                {{ error }}
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" formControlName="username" placeholder="Your username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" formControlName="password" placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || loading">
+                <span *ngIf="!loading">Sign In</span>
+                <span *ngIf="loading">Processing...</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a routerLink="/auth/register">Register</a></p>
+        </div>
+    </div>
+</div>

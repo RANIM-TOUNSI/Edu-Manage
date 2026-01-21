@@ -1,0 +1,61 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.gestion:gestion-etablissement:jar:0.0.1-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.thymeleaf.extras:thymeleaf-extras-springsecurity6:jar -> duplicate declaration of version (?) @ line 84, column 15
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] -----------------< com.gestion:gestion-etablissement >------------------
+[INFO] Building Gestion d'Etablissement 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ gestion-etablissement ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 17 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ gestion-etablissement ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 37 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[3,23] package io.jsonwebtoken does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[4,23] package io.jsonwebtoken does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[5,23] package io.jsonwebtoken does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[6,32] package io.jsonwebtoken.security does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[26,54] cannot find symbol
+  symbol:   class Claims
+  location: class com.gestion.backend.security.JwtUtil
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[31,13] cannot find symbol
+  symbol:   class Claims
+  location: class com.gestion.backend.security.JwtUtil
+[INFO] 6 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.517 s
+[INFO] Finished at: 2026-01-11T20:39:28+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project gestion-etablissement: Compilation failure: Compilation failure: 
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[3,23] package io.jsonwebtoken does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[4,23] package io.jsonwebtoken does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[5,23] package io.jsonwebtoken does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[6,32] package io.jsonwebtoken.security does not exist
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[26,54] cannot find symbol
+[ERROR]   symbol:   class Claims
+[ERROR]   location: class com.gestion.backend.security.JwtUtil
+[ERROR] /C:/spring-validation/backend/backend/src/main/java/com/gestion/backend/security/JwtUtil.java:[31,13] cannot find symbol
+[ERROR]   symbol:   class Claims
+[ERROR]   location: class com.gestion.backend.security.JwtUtil
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

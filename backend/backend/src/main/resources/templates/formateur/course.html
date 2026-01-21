@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+
+<body>
+    <div th:fragment="content">
+        <div class="header-breadcrumb animate-fade-in mb-4">
+            <a th:href="@{/formateur/dashboard}" class="btn btn-sm"
+                style="background: white; border: 1px solid #e2e8f0; color: #64748b;">
+                <i class="bi bi-arrow-left"></i> Curriculum
+            </a>
+        </div>
+
+        <div class="course-detail-header mb-5">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <span class="badge" th:text="${course.code}"
+                    style="background: rgba(79, 70, 229, 0.1); color: var(--primary); font-weight: 700;">CODE</span>
+                <span class="text-muted">|</span>
+                <span class="text-muted" style="font-size: 0.9rem; font-weight: 500;">Academic Course Module</span>
+            </div>
+            <h1 style="font-weight: 800; color: var(--text-main); font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 1rem;"
+                th:text="${course.title}">Advanced Mathematics</h1>
+            <p class="lead text-muted" style="max-width: 800px; line-height: 1.6;" th:text="${course.description}">
+                Course description for the group.</p>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden; border: 1px solid rgba(226, 232, 240, 0.8);">
+            <div class="table-header"
+                style="background: #f8fafc; padding: 1.5rem 2rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h5 style="margin: 0; font-weight: 700; color: var(--text-main);">Enrolled Students & Performance</h5>
+                <span class="badge" th:text="${enrollments.size() + ' Total Enrolled'}"
+                    style="background: #e2e8f0; color: #475569; font-weight: 600;"></span>
+            </div>
+
+            <div class="card-body" style="padding: 0;">
+                <div th:if="${enrollments.empty}" class="alert alert-warning m-4">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i> No students have enrolled in this course yet.
+                </div>
+
+                <div class="table-responsive" th:if="${!enrollments.empty}">
+                    <table class="table table-hover align-middle mb-0"
+                        style="border-collapse: separate; border-spacing: 0;">
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 2rem;">Student</th>
+                                <th>Registration ID</th>
+                                <th>Date Enrolled</th>
+                                <th>Result / 20</th>
+                                <th style="padding-right: 2rem; text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="enrollment : ${enrollments}" style="transition: 0.2s;">
+                                <td style="padding-left: 2rem;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar"
+                                            style="width: 40px; height: 40px; background: #f1f5f9; color: var(--primary); font-size: 0.9rem;"
+                                            th:text="${#strings.substring(enrollment.student.firstName, 0, 1) + #strings.substring(enrollment.student.lastName, 0, 1)}">
+                                            SH</div>
+                                        <div>
+                                            <div style="font-weight: 700; color: var(--text-main);"
+                                                th:text="${enrollment.student.firstName + ' ' + enrollment.student.lastName}">
+                                                Student Name</div>
+                                            <div style="font-size: 0.75rem; color: #94a3b8;"
+                                                th:text="${enrollment.student.email}">email@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${enrollment.student.matricule}"
+                                    style="font-family: monospace; font-weight: 600; color: #475569;">MAT-001</td>
+                                <td th:text="${#temporals.format(enrollment.enrollmentDate, 'MMM dd, yyyy')}"
+                                    style="color: #64748b;">Jan 12, 2024</td>
+                                <td>
+                                    <div th:if="${studentGrades.containsKey(enrollment.student.id)}">
+                                        <span class="badge" th:text="${studentGrades.get(enrollment.student.id)}"
+                                            th:style="${studentGrades.get(enrollment.student.id) >= 10 ? 'background: #dcfce7; color: #15803d;' : 'background: #fee2e2; color: #b91c1c;'}"
+                                            style="padding: 0.5rem 0.75rem; border-radius: 8px; font-weight: 800; font-size: 0.9rem;">
+                                            15.5
+                                        </span>
+                                    </div>
+                                    <div th:unless="${studentGrades.containsKey(enrollment.student.id)}">
+                                        <span class="badge"
+                                            style="background: #f1f5f9; color: #94a3b8; font-weight: 600;">Pending</span>
+                                    </div>
+                                </td>
+                                <td style="padding-right: 2rem; text-align: right;">
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                        style="border-radius: 8px; padding: 0.5rem 1rem;" data-bs-toggle="modal"
+                                        data-bs-target="#gradeModal" th:data-student-id="${enrollment.student.id}"
+                                        th:data-student-name="${enrollment.student.firstName + ' ' + enrollment.student.lastName}"
+                                        th:data-current="${studentGrades.get(enrollment.student.id)}"
+                                        onclick="openGradeModal(this)">
+                                        <i class="bi bi-pencil-fill me-1"></i> Grade
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Modal -->
+        <div class="modal fade" id="gradeModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 rounded-4 shadow-lg">
+                    <form th:action="@{/formateur/course/assign-grade}" method="post">
+                        <div class="modal-header border-0 pb-0 pt-4 px-4">
+                            <h5 class="modal-title"
+                                style="font-weight: 800; color: var(--text-main); font-size: 1.5rem; letter-spacing: -0.5px;">
+                                Update Evaluation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <p class="text-muted mb-4">Assigning grade for <span id="modalStudentName"
+                                    style="color: var(--primary); font-weight: 700;">Student</span></p>
+
+                            <input type="hidden" name="courseId" th:value="${course.id}">
+                            <input type="hidden" id="modalStudentId" name="studentId">
+
+                            <div class="mb-3">
+                                <label for="gradeValue" class="form-label"
+                                    style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">Course Grade
+                                    (Scale 0-20)</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.5" min="0" max="20"
+                                        class="form-control form-control-lg" id="gradeValue" name="value" required
+                                        style="border-radius: 12px; font-weight: 700; background: #f8fafc;">
+                                    <span class="input-group-text"
+                                        style="background: transparent; border: none; font-weight: 800; color: #94a3b8;">/
+                                        20</span>
+                                </div>
+                                <div class="form-text mt-2">Enter the student's performance score. Use decimal points if
+                                    necessary.</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 p-4">
+                            <button type="button" class="btn btn-light"
+                                style="padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600;"
+                                data-bs-dismiss="modal">Discard</button>
+                            <button type="submit" class="btn btn-primary"
+                                style="padding: 0.8rem 2rem; border-radius: 12px; font-weight: 700; box-shadow: 0 10px 15px -3px rgba(79,70,229,0.3);">Commit
+                                Grade</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            function openGradeModal(button) {
+                var studentId = button.getAttribute('data-student-id');
+                var studentName = button.getAttribute('data-student-name');
+                var currentGrade = button.getAttribute('data-current');
+
+                document.getElementById('modalStudentId').value = studentId;
+                document.getElementById('modalStudentName').textContent = studentName;
+                document.getElementById('gradeValue').value = currentGrade && currentGrade !== 'null' ? parseFloat(currentGrade) : '';
+
+                // Focus the input
+                setTimeout(() => document.getElementById('gradeValue').focus(), 500);
+            }
+        </script>
+    </div>
+</body>
+
+</html>
