@@ -16,20 +16,22 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Date Inscription</th>
+                    <th>Groupe</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="e : ${etudiants}">
                     <td th:text="${e.matricule}"></td>
-                    <td th:text="${e.nom}"></td>
-                    <td th:text="${e.prenom}"></td>
+                    <td th:text="${e.lastName}"></td>
+                    <td th:text="${e.firstName}"></td>
                     <td th:text="${e.email}"></td>
-                    <td th:text="${e.dateInscription}"></td>
+                    <td th:text="${e.registrationDate}"></td>
+                    <td th:text="${e.group != null ? e.group.name : 'N/A'}"></td>
                     <td>
-                        <a th:href="@{/admin/etudiants/edit/{id}(id=${e.matricule})}" class="btn btn-sm btn-warning"><i
+                        <a th:href="@{/admin/etudiants/edit/{id}(id=${e.id})}" class="btn btn-sm btn-warning"><i
                                 class="bi bi-pencil"></i></a>
-                        <a th:href="@{/admin/etudiants/delete/{id}(id=${e.matricule})}" class="btn btn-sm btn-danger"
+                        <a th:href="@{/admin/etudiants/delete/{id}(id=${e.id})}" class="btn btn-sm btn-danger"
                             onclick="return confirm('Etes-vous sûr ?')"><i class="bi bi-trash"></i></a>
                     </td>
                 </tr>

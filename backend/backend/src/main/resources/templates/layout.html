@@ -1,68 +1,447 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    th:fragment="html">
+
 <head>
     <meta charset="UTF-8">
-    <title>Gestion Etablissement</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduManage Admin - SSR Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --sidebar-width: 290px;
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #3730a3;
+            --bg-body: #f1f5f9;
+            --bg-sidebar: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Gestion Etablissement</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/admin/etudiants">Etudiants</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/admin/formateurs">Formateurs</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/admin/cours">Cours</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/admin/inscriptions">Inscriptions</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/admin/notes">Notes</a>
-                </li>
-            </ul>
-            <div class="d-flex align-items-center text-white">
-                <span sec:authentication="name" class="me-3">User</span>
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+        body {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Modern UI */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 2.5rem 1.5rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .sidebar-header {
+            margin-bottom: 3.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-box {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 2rem 0 1rem 0.5rem;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item {
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-item:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+        }
+
+        /* Content Area */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .top-bar {
+            height: 85px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .page-info h4 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #fff;
+            padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            background: #fef2f2;
+            color: #ef4444;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .content {
+            padding: 3rem;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Elegant Cards */
+        .card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Modern Tables */
+        .table-container {
+            margin-top: 1.5rem;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 1.25rem 1.5rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fcfdfe;
+        }
+
+        /* Action Buttons */
+        .btn {
+            font-family: inherit;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+            opacity: 1;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .btn-outline-danger {
+            background: transparent;
+            border: 1.5px solid #fee2e2;
+            color: #ef4444;
+        }
+
+        .btn-outline-danger:hover {
+            background: #fee2e2;
+        }
+
+        .alert {
+            padding: 1.25rem 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <span class="brand-name">EduManage</span>
+        </div>
+
+        <nav class="nav-menu">
+            <a th:href="@{/}" class="nav-item">
+                <i class="bi bi-house-door"></i>
+                <span>Summary</span>
+            </a>
+
+            <div sec:authorize="hasRole('ADMIN')">
+                <div class="nav-section-label">Management</div>
+                <a th:href="@{/admin/etudiants}" class="nav-item">
+                    <i class="bi bi-people"></i>
+                    <span>Students</span>
+                </a>
+                <a th:href="@{/admin/formateurs}" class="nav-item">
+                    <i class="bi bi-person-badge"></i>
+                    <span>Trainers</span>
+                </a>
+                <a th:href="@{/admin/cours}" class="nav-item">
+                    <i class="bi bi-book"></i>
+                    <span>Courses</span>
+                </a>
+                <a th:href="@{/admin/planning}" class="nav-item">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Timetable</span>
+                </a>
+
+                <div class="nav-section-label">Structure</div>
+                <a th:href="@{/admin/advanced/specialties}" class="nav-item">
+                    <i class="bi bi-grid-1x2"></i>
+                    <span>Specialties</span>
+                </a>
+                <a th:href="@{/admin/advanced/groups}" class="nav-item">
+                    <i class="bi bi-microsoft-teams"></i>
+                    <span>Groups</span>
+                </a>
+                <a th:href="@{/admin/advanced/sessions}" class="nav-item">
+                    <i class="bi bi-hourglass-split"></i>
+                    <span>Sessions</span>
+                </a>
+
+                <div class="nav-section-label">Records</div>
+                <a th:href="@{/admin/inscriptions}" class="nav-item">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Enrollments</span>
+                </a>
+                <a th:href="@{/admin/notes}" class="nav-item">
+                    <i class="bi bi-check2-circle"></i>
+                    <span>Grades</span>
+                </a>
+            </div>
+
+            <div sec:authorize="hasRole('TRAINER')">
+                <div class="nav-section-label">Academic</div>
+                <a th:href="@{/formateur/dashboard}" class="nav-item">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="main-container">
+        <header class="top-bar">
+            <div class="page-info">
+                <h4>SSR Administration Portal</h4>
+            </div>
+            <div class="user-pill">
+                <span sec:authentication="name" style="font-weight: 700;"></span>
+                <div class="avatar">U</div>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="logout-btn" title="Sign Out">
+                        <i class="bi bi-power"></i>
+                    </button>
                 </form>
             </div>
-        </div>
-    </div>
-</nav>
+        </header>
 
-<div class="container" th:if="${successMessage}">
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${successMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-</div>
-<div class="container" th:if="${errorMessage}">
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${errorMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-</div>
+        <main class="content">
+            <div th:if="${successMessage}" class="alert alert-success">
+                <i class="bi bi-check-circle-fill"></i>
+                <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span th:text="${errorMessage}"></span>
+            </div>
 
-<div class="container" th:replace="${content}">
-    <!-- Page Content will be inserted here -->
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <div th:replace="~{::content}"></div>
+        </main>
+    </div>
 </body>
+
 </html>

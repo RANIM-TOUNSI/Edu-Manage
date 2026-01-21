@@ -15,15 +15,21 @@
                     <th>Nom</th>
                     <th>Spécialité</th>
                     <th>Email</th>
+                    <th>Courses</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="f : ${formateurs}">
                     <td th:text="${f.id}"></td>
-                    <td th:text="${f.nom}"></td>
-                    <td th:text="${f.specialite}"></td>
+                    <td th:text="${f.name}"></td>
+                    <td th:text="${f.specialty}"></td>
                     <td th:text="${f.email}"></td>
+                    <td>
+                        <span th:if="${f.courses != null}" th:each="c : ${f.courses}"
+                            class="badge bg-info text-dark me-1" th:text="${c.code}"></span>
+                        <span th:if="${f.courses == null || f.courses.empty}" class="text-muted">No courses</span>
+                    </td>
                     <td>
                         <a th:href="@{/admin/formateurs/edit/{id}(id=${f.id})}" class="btn btn-sm btn-warning"><i
                                 class="bi bi-pencil"></i></a>

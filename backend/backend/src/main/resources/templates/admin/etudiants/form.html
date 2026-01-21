@@ -5,8 +5,7 @@
     <div th:fragment="content">
         <h2 th:text="${isEdit} ? 'Modifier Etudiant' : 'Nouvel Etudiant'"></h2>
 
-        <form
-            th:action="${isEdit} ? @{/admin/etudiants/edit/{id}(id=${etudiantInput.matricule})} : @{/admin/etudiants/create}"
+        <form th:action="${isEdit} ? @{/admin/etudiants/edit/{id}(id=${etudiantInput.id})} : @{/admin/etudiants/create}"
             th:object="${etudiantInput}" method="post" class="mt-4">
 
             <div class="mb-3">
@@ -16,15 +15,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="nom" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="nom" th:field="*{nom}">
-                <div class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+                <label for="lastName" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+                <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
             </div>
 
             <div class="mb-3">
-                <label for="prenom" class="form-label">Prénom</label>
-                <input type="text" class="form-control" id="prenom" th:field="*{prenom}">
-                <div class="text-danger" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
+                <label for="firstName" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+                <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
             </div>
 
             <div class="mb-3">
@@ -34,10 +33,20 @@
             </div>
 
             <div class="mb-3">
-                <label for="dateInscription" class="form-label">Date Inscription</label>
-                <input type="date" class="form-control" id="dateInscription" th:field="*{dateInscription}">
-                <div class="text-danger" th:if="${#fields.hasErrors('dateInscription')}" th:errors="*{dateInscription}">
+                <label for="registrationDate" class="form-label">Date Inscription</label>
+                <input type="date" class="form-control" id="registrationDate" th:field="*{registrationDate}">
+                <div class="text-danger" th:if="${#fields.hasErrors('registrationDate')}"
+                    th:errors="*{registrationDate}">
                 </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="group" class="form-label">Groupe Académique</label>
+                <select class="form-select" id="group" th:field="*{group.id}" required>
+                    <option value="" disabled selected>-- Choisir un groupe --</option>
+                    <option th:each="g : ${groups}" th:value="${g.id}" th:text="${g.name}"></option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('group')}" th:errors="*{group}"></div>
             </div>
 
             <button type="submit" class="btn btn-primary">Enregistrer</button>

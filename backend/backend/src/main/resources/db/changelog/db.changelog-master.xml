@@ -5,8 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd"
         objectQuotingStrategy="QUOTE_ALL_OBJECTS">
-    <include file="db/changelog/changes/db.changelog-0.0.1.xml" />
-    <include file="db/changelog/changes/db.changelog-0.0.2.xml" />
-    <include file="db/changelog/changes/db.changelog-0.0.3.xml" />
-    <include file="db/changelog/changes/db.changelog-0.0.4.xml" />
+        
+    <include file="db/changelog/changes/db.changelog-initial.xml"/>
+    <include file="db/changelog/changes/v2-advanced-modules.xml"/>
+    <include file="db/changelog/changes/v3-user-entity-updates.xml"/>
+    <include file="db/changelog/changes/v4-user-constraints.xml"/>
 </databaseChangeLog>

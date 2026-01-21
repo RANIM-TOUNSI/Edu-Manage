@@ -21,9 +21,9 @@
             <tbody>
                 <tr th:each="i : ${inscriptions}">
                     <td th:text="${i.id}"></td>
-                    <td th:text="${i.date}"></td>
-                    <td th:text="${i.etudiantMatricule}"></td>
-                    <td th:text="${i.coursCode}"></td>
+                    <td th:text="${i.enrollmentDate}"></td>
+                    <td th:text="${i.student != null ? i.student.matricule : 'N/A'}"></td>
+                    <td th:text="${i.course != null ? i.course.code : 'N/A'}"></td>
                     <td>
                         <a th:href="@{/admin/inscriptions/delete/{id}(id=${i.id})}" class="btn btn-sm btn-danger"
                             onclick="return confirm('Etes-vous sûr ?')"><i class="bi bi-trash"></i></a>

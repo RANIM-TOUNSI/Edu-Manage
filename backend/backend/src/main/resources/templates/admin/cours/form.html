@@ -3,41 +3,76 @@
 
 <body>
     <div th:fragment="content">
-        <h2 th:text="${isEdit} ? 'Modifier Cours' : 'Nouveau Cours'"></h2>
+        <div class="header-section animate-fade-in mb-4">
+            <h1 class="brand-name" style="font-size: 2.5rem; margin-bottom: 0.5rem;"
+                th:text="${isEdit} ? 'Modify Curriculum Unit' : 'Create New Unit'"></h1>
+            <p class="text-muted lead">Configure module parameters and faculty assignments.</p>
+        </div>
 
-        <form th:action="${isEdit} ? @{/admin/cours/edit/{id}(id=${coursInput.code})} : @{/admin/cours/create}"
-            th:object="${coursInput}" method="post" class="mt-4">
+        <div class="card"
+            style="max-width: 900px; padding: 3rem; border: 1px solid rgba(226,232,240,0.8); box-shadow: 0 20px 50px rgba(0,0,0,0.02);">
+            <form th:action="${isEdit} ? @{/admin/cours/edit/{id}(id=${courseInput.id})} : @{/admin/cours/create}"
+                th:object="${courseInput}" method="post">
 
-            <div class="mb-3">
-                <label for="code" class="form-label">Code</label>
-                <input type="text" class="form-control" id="code" th:field="*{code}" th:readonly="${isEdit}">
-                <div class="text-danger" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div>
-            </div>
+                <input type="hidden" th:field="*{id}">
 
-            <div class="mb-3">
-                <label for="titre" class="form-label">Titre</label>
-                <input type="text" class="form-control" id="titre" th:field="*{titre}">
-                <div class="text-danger" th:if="${#fields.hasErrors('titre')}" th:errors="*{titre}"></div>
-            </div>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label" style="font-weight: 700; color: var(--text-main);">Module Code</label>
+                        <input type="text" th:field="*{code}" class="form-control form-control-lg"
+                            style="background: #f8fafc; border-radius: 12px; font-weight: 600;"
+                            th:placeholder="${isEdit} ? '' : 'Auto-generated'" th:readonly="${isEdit}">
+                        <div class="form-text" th:unless="${isEdit}">Leave empty for automatic code.</div>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label" style="font-weight: 700; color: var(--text-main);">Full Title</label>
+                        <input type="text" th:field="*{title}" class="form-control form-control-lg"
+                            style="background: #f8fafc; border-radius: 12px;"
+                            placeholder="e.g. Advanced Software Engineering" required>
+                    </div>
+                </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
-                <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
-            </div>
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 700; color: var(--text-main);">Detailed
+                        Syllabus</label>
+                    <textarea th:field="*{description}" class="form-control" rows="5"
+                        style="background: #f8fafc; border-radius: 12px;"
+                        placeholder="Describe the learning objectives and prerequisites..."></textarea>
+                </div>
 
-            <div class="mb-3">
-                <label for="formateurId" class="form-label">Formateur</label>
-                <select class="form-select" id="formateurId" th:field="*{formateurId}">
-                    <option value="">Sélectionner un formateur</option>
-                    <option th:each="f : ${formateurs}" th:value="${f.id}" th:text="${f.nom}"></option>
-                </select>
-                <div class="text-danger" th:if="${#fields.hasErrors('formateurId')}" th:errors="*{formateurId}"></div>
-            </div>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-weight: 700; color: var(--text-main);">Faculty
+                            Leader</label>
+                        <select th:field="*{trainer.id}" class="form-select form-control-lg"
+                            style="background: #f8fafc; border-radius: 12px;">
+                            <option value="">-- Unassigned / Open --</option>
+                            <option th:each="t : ${trainers}" th:value="${t.id}" th:text="${t.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-weight: 700; color: var(--text-main);">Academic
+                            Pathway</label>
+                        <select th:field="*{specialty.id}" class="form-select form-control-lg"
+                            style="background: #f8fafc; border-radius: 12px;">
+                            <option value="">-- Core Curriculum --</option>
+                            <option th:each="s : ${specialties}" th:value="${s.id}" th:text="${s.name}"></option>
+                        </select>
+                    </div>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="/admin/cours" class="btn btn-secondary">Annuler</a>
-        </form>
+                <div class="d-flex gap-3 pt-4 border-top">
+                    <button type="submit" class="btn btn-primary"
+                        style="padding: 1rem 3rem; border-radius: 12px; font-weight: 700;">
+                        <i class="bi bi-cloud-check-fill me-2"></i> Commit Changes
+                    </button>
+                    <a th:href="@{/admin/cours}" class="btn btn-light"
+                        style="padding: 1rem 3rem; border-radius: 12px; font-weight: 600; background: #f1f5f9;">
+                        Discard
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 

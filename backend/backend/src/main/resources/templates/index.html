@@ -1,45 +1,78 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:replace="~{layout :: html}">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Gestion Etablissement</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    th:replace="~{layout :: html}">
 
 <body>
-<div th:fragment="content">
-    <div class="container mt-4">
-        <div class="jumbotron">
-            <h1 class="display-4">Bienvenue sur Gestion Etablissement</h1>
-            <p class="lead">Plateforme de gestion pour Étudiants, Formateurs et Administration.</p>
-            <hr class="my-4">
+    <div th:fragment="content">
+        <div class="welcome-hero animate-fade-in"
+            style="margin-bottom: 3rem; text-align: center; background: white; padding: 4rem; border-radius: 24px; border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 10px 40px rgba(0,0,0,0.03);">
+            <h1
+                style="font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 1rem; background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Master Your Institution.
+            </h1>
+            <p
+                style="font-size: 1.25rem; color: #64748b; max-width: 600px; margin: 0 auto 2.5rem auto; line-height: 1.6;">
+                The next-generation education portal for seamless student management, curriculum tracking, and academic
+                scheduling.
+            </p>
 
-            <!-- Authenticated users -->
-            <div th:if="${#authorization.expression('isAuthenticated()')}">
-                <p>
-                    Vous êtes connecté en tant que
-                    <span sec:authentication="name" class="fw-bold"></span>
-                    avec le rôle
-                    <span sec:authentication="principal.authorities" class="fw-bold"></span>.
-                </p>
-                <a href="/logout" class="btn btn-danger btn-lg">Se déconnecter</a>
+            <div th:if="${#authorization.expression('isAuthenticated()')}"
+                style="display: flex; justify-content: center; gap: 1.5rem; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 2.5rem;">
+                <div class="avatar" style="width: 55px; height: 55px; font-size: 1.25rem;">
+                    <span sec:authentication="name" th:text="${#strings.substring(#authentication.name, 0, 1)}">A</span>
+                </div>
+                <div style="text-align: left;">
+                    <h5 style="margin: 0; font-weight: 700;">Welcome back, <span sec:authentication="name">User</span>
+                    </h5>
+                    <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Managing as <span class="badge"
+                            style="background: #eff6ff; color: #4f46e5; padding: 2px 8px; border-radius: 6px;">Administrator</span>
+                    </p>
+                </div>
             </div>
 
-            <!-- Anonymous users -->
-            <div th:unless="${#authorization.expression('isAuthenticated()')}">
-                <p>
-                    Veuillez vous
-                    <a href="/login" class="btn btn-primary btn-lg" role="button">Connecter</a>
-                    pour accéder à l'application.
-                </p>
+            <div th:unless="${#authorization.expression('isAuthenticated()')}" style="padding-top: 2rem;">
+                <a href="/login" class="btn btn-primary"
+                    style="padding: 1rem 3rem; border-radius: 100px; font-size: 1.1rem;">
+                    <i class="bi bi-shield-lock-fill"></i> Secure Sign In
+                </a>
+            </div>
+        </div>
+
+        <div th:if="${#authorization.expression('isAuthenticated()')}" class="card"
+            style="padding: 0; overflow: hidden; border: none; background: transparent;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="quick-action card" style="transition: 0.3s; cursor: pointer;">
+                    <div style="color: #4f46e5; font-size: 2rem; margin-bottom: 1rem;"><i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 style="font-weight: 700; margin-bottom: 0.5rem;">Student Hub</h3>
+                    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.5rem;">Register, manage, and track
+                        student registration information.</p>
+                    <a href="/admin/etudiants" class="btn btn-primary"
+                        style="width: 100%; justify-content: center;">Access Hub</a>
+                </div>
+
+                <div class="quick-action card" style="transition: 0.3s; cursor: pointer;">
+                    <div style="color: #8b5cf6; font-size: 2rem; margin-bottom: 1rem;"><i class="bi bi-journals"></i>
+                    </div>
+                    <h3 style="font-weight: 700; margin-bottom: 0.5rem;">Curriculum</h3>
+                    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.5rem;">Design and assign courses to
+                        specialty groups and trainers.</p>
+                    <a href="/admin/cours" class="btn btn-primary" style="width: 100%; justify-content: center;">Manage
+                        Courses</a>
+                </div>
+
+                <div class="quick-action card" style="transition: 0.3s; cursor: pointer;">
+                    <div style="color: #10b981; font-size: 2rem; margin-bottom: 1rem;"><i
+                            class="bi bi-calendar-check"></i></div>
+                    <h3 style="font-weight: 700; margin-bottom: 0.5rem;">Live Planning</h3>
+                    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.5rem;">Organize weekly schedules and
+                        resolve potential conflicts.</p>
+                    <a href="/admin/planning" class="btn btn-primary" style="width: 100%; justify-content: center;">Open
+                        Planner</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
